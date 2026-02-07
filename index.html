@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GIRLFRIEND ❤️</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:url("https://imgs.search.brave.com/VPnClWaMAWQsd6yyReUvngesKQXULgd_Iw7ycwS2LX4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vdmlk/ZW9zL3RodW1ibmFp/bHMvb3JpZ2luYWxz/L2QwLzZlL2FmL2Qw/NmVhZjZlMmRhNGZh/MTgxN2EyMzNhMDE4/NGRmMzZkLjAwMDAw/MDAuanBn") center/cover fixed no-repeat;
+color:#7a0019;
+overflow-x:hidden;
+text-align:center;
+}
+
+section{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:40px;
+}
+
+.card{
+background:rgba(255,255,255,.85);
+border-radius:30px;
+padding:50px;
+box-shadow:0 20px 40px rgba(0,0,0,.2);
+max-width:600px;
+width:100%;
+
+
+}
+
+.postcard{
+background:url("postcard.png") center/cover no-repeat;
+height:120px;
+border-radius:25px;
+margin-bottom:25px;
+}
+
+h1{
+font-size:3rem;
+color:#b30000;
+}
+
+button{
+margin:15px;
+padding:15px 40px;
+border:none;
+border-radius:40px;
+background:#b30000;
+color:white;
+font-size:18px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#ff4d6d;
+transform:scale(1.05);
+}
+
+#messageBox{
+margin-top:20px;
+padding:15px;
+border-radius:20px;
+background:#ffd6dc;
+color:#b30000;
+display:none;
+}
+
+#surprise{display:none}
+
+#rose{
+width:240px;
+}
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:18px;
+animation:float 7s linear infinite;
+color:#ff4d6d;
+}
+
+@keyframes float{
+0%{transform:translateY(0);opacity:1}
+100%{transform:translateY(-100vh);opacity:0}
+}
+
+</style>
+</head>
+
+<body>
+
+<section>
+<div class="card">
+<div class="postcard"></div>
+<h1>Welcome</h1>
+<h2>GIRLFRIEND ❤️</h2>
+<p>Scroll down baby 😌</p>
+<img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif"
+     style="width:180px;margin-top:20px;border-radius:20px;">
+</div>
+</section>
+
+<section>
+<div class="card">
+<h2>Which year of Valentine’s Day is it?</h2>
+
+<button onclick="wrong()">3 Years</button>
+<button onclick="correct()">2 Years</button>
+<button onclick="wrong()">4 Years</button>
+<button onclick="wrong()">None</button>
+
+<div id="messageBox"></div>
+</div>
+</section>
+
+<section id="surprise">
+<div class="card">
+<h1>Congratulations❤️🥳</h1>
+<p>You unlocked the surprise </p>
+
+<button onclick="openSurprise()">Open Surprise</button>
+
+<div id="roseBox" style="display:none;margin-top:30px">
+<img id="rose" src="https://imgs.search.brave.com/A7H1yV1vgoUaXbN3manLrq9pTWqunSNwHiIx-QEDl4M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS50ZW5vci5jb20v/cUc1SnRhanJhTklB/QUFBTS9oYWxsb3dl/ZW50b3duLWhhbGxv/d2Vlbi5naWY.gif">
+<h1> Happy Rose Day To My Baby 🌹</h1>
+</div>
+</div>
+</section>
+
+<script>
+
+function wrong(){
+let box=document.getElementById("messageBox");
+box.style.display="block";
+box.innerHTML="Try again 😜";
+}
+
+function correct(){
+let box=document.getElementById("messageBox");
+box.style.display="block";
+box.innerHTML="Correct! Scroll down ❤️";
+document.getElementById("surprise").style.display="flex";
+document.getElementById("surprise").scrollIntoView({behavior:"smooth"});
+}
+
+function openSurprise(){
+document.getElementById("roseBox").style.display="block";
+}
+
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),7000);
+},500);
+
+</script>
+
+</body>
+</html>
