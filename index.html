@@ -2,219 +2,145 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Rashwin Portfolio</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlock My Picture</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-
-body{
-background:#020617;
-color:white;
-overflow-x:hidden;
+body {
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
+h1 {
+    margin-top: 20px;
+    color: #ff4444;
 }
 
-nav{
-position:fixed;
-width:100%;
-padding:15px 40px;
-display:flex;
-justify-content:space-between;
-background:#020617cc;
-backdrop-filter:blur(10px);
-z-index:100;
+#gameBox {
+    margin: 20px auto;
+    width: 400px;
+    height: 400px;
+    border: 4px solid white;
+    background: black;
+    position: relative;
 }
 
-nav a{
-color:white;
-text-decoration:none;
-margin-left:15px;
+canvas {
+    background: #000;
 }
 
-section{
-max-width:1000px;
-margin:auto;
-padding:100px 20px;
+#unlockImage {
+    display: none;
+    margin-top: 20px;
 }
 
-.hero{
-padding-top:160px;
-text-align:center;
-}
-
-.hero img{
-width:180px;
-height:180px;
-border-radius:50%;
-object-fit:cover;
-border:4px solid #38bdf8;
-box-shadow:0 0 40px #38bdf8;
-animation:pulse 4s infinite;
-}
-
-@keyframes pulse{
-50%{box-shadow:0 0 80px #38bdf8;}
-}
-
-h1{margin:20px 0}
-
-.btn{
-background:#38bdf8;
-border:none;
-padding:10px 25px;
-margin-top:15px;
-border-radius:6px;
-cursor:pointer;
-}
-
-.card{
-background:#020617dd;
-border:1px solid #38bdf833;
-padding:20px;
-border-radius:15px;
-margin:15px 0;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-box-shadow:0 0 30px #38bdf833;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-
-footer{
-text-align:center;
-padding:30px;
-color:gray;
+#unlockImage img {
+    width: 300px;
+    border: 5px solid white;
+    border-radius: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
+<h1>Eat 3 red to unlock my picture</h1>
 
-<nav>
-<b>Rashwin</b>
-<div>
-<a href="#about">About</a>
-<a href="#skills">Skills</a>
-<a href="#projects">Projects</a>
-<a href="#contact">Contact</a>
-</div>
-</nav>
-
-<div class="hero">
-<img src="profile.jpg">
-<h1>Rashwin Ponnanna A N</h1>
-<h3>Aspiring Cloud Engineer | DevOps Trainee</h3>
-<p>BCA graduate passionate about AWS & Linux</p>
-<button class="btn" onclick="go('contact')">Contact Me</button>
+<div id="gameBox">
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
 </div>
 
-<section id="about">
-<h2>About</h2>
-<p>
-Cloud computing enthusiast training in AWS and Linux DevOps.
-Focused on scalable systems and infrastructure.
-</p>
-</section>
-
-<section id="skills">
-<h2>Skills</h2>
-<div class="grid">
-<div class="card">C • Java • Python</div>
-<div class="card">HTML • CSS • JS • PHP</div>
-<div class="card">AWS EC2 • Linux • Virtualization</div>
-<div class="card">MySQL • Networking • DBMS</div>
+<div id="unlockImage">
+    <h2>Unlocked 🔥</h2>
+    <img src="profile.jpg">
 </div>
-</section>
-
-<section id="projects">
-<h2>Projects</h2>
-
-<div class="card">
-<h3>Saral Yatri</h3>
-<p>Ride booking app with AI fare suggestion.</p>
-</div>
-
-<div class="card">
-<h3>Interior Design Website</h3>
-<p>Hosted on Linux server.</p>
-</div>
-
-</section>
-
-<section id="contact">
-<h2>Contact</h2>
-<div class="card">
-Email: rashwinponnanna@gmail.com<br>
-Phone: 7259140244<br>
-Location: Mysuru
-</div>
-</section>
-
-<footer>
-© 2026 Rashwin | GitHub Pages
-</footer>
 
 <script>
-function go(id){
-document.getElementById(id).scrollIntoView({behavior:"smooth"});
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const box = 20;
+let snake = [{x: 200, y: 200}];
+let direction = "RIGHT";
+let score = 0;
+
+let food = spawnFood();
+
+function spawnFood() {
+    return {
+        x: Math.floor(Math.random() * 20) * box,
+        y: Math.floor(Math.random() * 20) * box
+    };
 }
 
-/* Particle Background */
+document.addEventListener("keydown", changeDirection);
 
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
-
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-
-let particles=[];
-
-for(let i=0;i<80;i++){
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2+1,
-dx:(Math.random()-.5),
-dy:(Math.random()-.5)
-});
+function changeDirection(event) {
+    if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+    if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+    if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+    if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
 }
 
-function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
+function draw() {
+    ctx.clearRect(0, 0, 400, 400);
 
-particles.forEach(p=>{
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fillStyle="#38bdf8";
-ctx.fill();
+    // Draw snake
+    snake.forEach((part, index) => {
+        ctx.fillStyle = index === 0 ? "#00ff88" : "#00cc66";
+        ctx.fillRect(part.x, part.y, box, box);
+    });
 
-p.x+=p.dx;
-p.y+=p.dy;
+    // Draw food (red ball)
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.arc(food.x + box/2, food.y + box/2, box/2 - 2, 0, Math.PI * 2);
+    ctx.fill();
 
-if(p.x<0||p.x>canvas.width) p.dx*=-1;
-if(p.y<0||p.y>canvas.height) p.dy*=-1;
-});
+    let headX = snake[0].x;
+    let headY = snake[0].y;
 
-requestAnimationFrame(animate);
+    if (direction === "LEFT") headX -= box;
+    if (direction === "UP") headY -= box;
+    if (direction === "RIGHT") headX += box;
+    if (direction === "DOWN") headY += box;
+
+    // Wall collision
+    if (headX < 0 || headX >= 400 || headY < 0 || headY >= 400) {
+        clearInterval(game);
+        alert("Game Over");
+        location.reload();
+    }
+
+    // Self collision
+    for (let i = 1; i < snake.length; i++) {
+        if (headX === snake[i].x && headY === snake[i].y) {
+            clearInterval(game);
+            alert("Game Over");
+            location.reload();
+        }
+    }
+
+    // Eat food
+    if (headX === food.x && headY === food.y) {
+        score++;
+        food = spawnFood();
+    } else {
+        snake.pop();
+    }
+
+    const newHead = {x: headX, y: headY};
+    snake.unshift(newHead);
+
+    // Unlock after 3
+    if (score === 3) {
+        clearInterval(game);
+        document.getElementById("unlockImage").style.display = "block";
+    }
 }
 
-animate();
+let game = setInterval(draw, 120);
 </script>
 
 </body>
